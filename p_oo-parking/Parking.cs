@@ -9,7 +9,7 @@ namespace p_oo_parking
     internal class Parking
     {
         private List<Car> _cars;
-        private List<ParkingSpace> _parkingSpaces;
+        public List<ParkingSpace> _parkingSpaces { get; private set; }
 
         static public int TicketPrice { get; private set; } = 5; // Par Heure
 
@@ -17,6 +17,11 @@ namespace p_oo_parking
         {
             _cars = new List<Car>();
             _parkingSpaces = new List<ParkingSpace>();
+
+            //for (int i = 0; i < 10; i++)
+            //{
+            //    _parkingSpaces.Add(new ParkingSpace(this));
+            //} Mettre dans test.
         }
     }
 }
