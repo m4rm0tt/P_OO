@@ -17,5 +17,19 @@ namespace p_oo_parking
         {
             _arrivedTime = DateTime.Now;
         }
+
+        public void DeleteTicket()
+        {
+            CalculPrice();   
+        }
+
+        private void CalculPrice()
+        {
+            _leavedTime = _arrivedTime + TimeSpan.FromHours(1); // Futur Random, mais pour l'instant en dur car je ne vais pas m'eparpier sur tout le code maintenant.
+
+            TimeSpan total = _leavedTime - _arrivedTime;
+
+            _amount = (int)(Math.Floor(total.TotalHours) * Parking.TicketPrice);
+        }
     }
 }

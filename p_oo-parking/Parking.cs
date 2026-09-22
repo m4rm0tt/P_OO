@@ -11,6 +11,8 @@ namespace p_oo_parking
         private List<Car> _cars;
         private List<ParkingSpace> _parkingSpaces;
 
+        static public int TicketPrice { get; private set; } = 5; // Par Heure
+
         public Parking()
         {
             _cars = new List<Car>();
