@@ -17,5 +17,14 @@ namespace p_oo_parking
 
             return validity = Regex.IsMatch(p, patern);
         }
+
+        public static ConsoleKeyInfo? ReadInput()
+        {
+            if (Console.KeyAvailable)
+            {
+                return Console.ReadKey(true);
+            }
+            return null;
+        }
     }
 }
