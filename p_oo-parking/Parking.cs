@@ -18,10 +18,11 @@ namespace p_oo_parking
             _cars = new List<Car>();
             _parkingSpaces = new List<ParkingSpace>();
 
-            //for (int i = 0; i < 10; i++)
-            //{
-            //    _parkingSpaces.Add(new ParkingSpace(this));
-            //} Mettre dans test.
+            for (int i = 0; i < 10; i++)
+            {
+                _parkingSpaces.Add(new ParkingSpace(_parkingSpaces.Count));
+            }
+            //Mettre dans test.
         }
     }
 }

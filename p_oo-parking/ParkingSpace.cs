@@ -11,11 +11,11 @@ namespace p_oo_parking
         private int _number;
         private bool _isOccupied;
 
-        public ParkingSpace(Parking p)
+        public ParkingSpace(int c)
         {
-            _number = p._parkingSpaces.Count + 1;
+            _number = c + 1;
 
-            // Console.WriteLine(_number); Mettre dans un test.
+            //Console.WriteLine(_number); Mettre dans un test.
 
             _isOccupied = false;
         }
