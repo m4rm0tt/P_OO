@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,9 +48,30 @@ namespace p_oo_parking
 
                     if (isValid)
                     {
-                        _cars.Add(new Car(_parkingSpaces[_cars.Count], plate));
+                        int freeSpace = 0;
 
-                        Console.WriteLine("Véhicule ajouter !");
+                        while (_parkingSpaces[freeSpace].IsOccupied)
+                        {
+                            freeSpace++;
+
+                            if (freeSpace >= _parkingSpaces.Count)
+                            {
+                                break;
+                            }
+                        }
+
+                        if (freeSpace < _parkingSpaces.Count)
+                        {
+                            _parkingSpaces[freeSpace].SetOccupied(true);
+                            _cars.Add(new Car(_parkingSpaces[freeSpace], plate));
+                            Debug.WriteLine($"Véhicule ajouté à la place {freeSpace + 1}");
+
+                            Console.WriteLine("Véhicule ajouter !");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Parking complet !");
+                        }
                     }
                     else
                     {

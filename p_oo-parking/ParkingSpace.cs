@@ -9,7 +9,7 @@ namespace p_oo_parking
     internal class ParkingSpace
     {
         private int _number;
-        private bool _isOccupied;
+        public bool IsOccupied { get; private set; }
 
         public ParkingSpace(int c)
         {
@@ -17,7 +17,12 @@ namespace p_oo_parking
 
             //Console.WriteLine(_number); Mettre dans un test.
 
-            _isOccupied = false;
+            IsOccupied = false;
+        }
+        
+        public void SetOccupied(bool newState)
+        {
+            IsOccupied = newState;
         }
     }
 }
