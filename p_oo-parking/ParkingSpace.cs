@@ -8,12 +8,12 @@ namespace p_oo_parking
 {
     internal class ParkingSpace
     {
-        private int _number;
+        public int Number { get; private set; }
         public bool IsOccupied { get; private set; }
 
         public ParkingSpace(int c)
         {
-            _number = c + 1;
+            Number = c + 1;
 
             //Console.WriteLine(_number); Mettre dans un test.
 

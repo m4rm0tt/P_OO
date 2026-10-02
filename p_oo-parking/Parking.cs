@@ -14,20 +14,20 @@ namespace p_oo_parking
         private ConsoleKeyInfo _key;
         private bool _isShow;
 
-        public List<ParkingSpace> _parkingSpaces { get; private set; }
+        public List<ParkingSpace> ParkingSpaces { get; private set; }
 
         static public int TicketPrice { get; private set; } = 5; // Par Heure
 
         public Parking()
         {
             _cars = new List<Car>();
-            _parkingSpaces = new List<ParkingSpace>();
+            ParkingSpaces = new List<ParkingSpace>();
 
             _isShow = false;
 
             for (int i = 0; i < 10; i++)
             {
-                _parkingSpaces.Add(new ParkingSpace(_parkingSpaces.Count));
+                ParkingSpaces.Add(new ParkingSpace(ParkingSpaces.Count));
             }
         }
 
@@ -50,20 +50,20 @@ namespace p_oo_parking
                     {
                         int freeSpace = 0;
 
-                        while (_parkingSpaces[freeSpace].IsOccupied)
+                        while (ParkingSpaces[freeSpace].IsOccupied)
                         {
                             freeSpace++;
 
-                            if (freeSpace >= _parkingSpaces.Count)
+                            if (freeSpace >= ParkingSpaces.Count)
                             {
                                 break;
                             }
                         }
 
-                        if (freeSpace < _parkingSpaces.Count)
+                        if (freeSpace < ParkingSpaces.Count)
                         {
-                            _parkingSpaces[freeSpace].SetOccupied(true);
-                            _cars.Add(new Car(_parkingSpaces[freeSpace], plate));
+                            ParkingSpaces[freeSpace].SetOccupied(true);
+                            _cars.Add(new Car(ParkingSpaces[freeSpace], plate));
                             Debug.WriteLine($"Véhicule ajouté à la place {freeSpace + 1}");
 
                             Console.WriteLine("Véhicule ajouter !");
@@ -83,7 +83,135 @@ namespace p_oo_parking
 
                     _key = default;
                     _isShow = false;
+                    
                     break;
+                
+                case ConsoleKey.D2:
+                    Console.Clear();
+                    Console.WriteLine("1. Plaque\n" +
+                                      "2. Place\n" +
+                                      "\nAppuyer sur un touche pour choisir");
+                    
+                    _key = Console.ReadKey();
+
+                    bool found = false;
+                    
+                    switch(_key.Key)
+                    { 
+                        
+                        case ConsoleKey.D1:
+                            Console.Clear();
+                            Console.WriteLine("Plaque : ");
+                            
+                            plate = Console.ReadLine();
+                            isValid = Helpers.PlateValidation(plate);
+                            
+                            if(isValid)
+                            {
+                                found = false;
+                                
+                                foreach (Car car in _cars)
+                                {
+                                    if(car.Plate == plate)
+                                    {
+                                        found = true;
+                                        Console.Clear();
+                                        Console.WriteLine("Sur ? O/N");
+                                        _key = Console.ReadKey();
+
+                                        if (_key.Key == ConsoleKey.O)
+                                        {
+                                            car.Ticket.Close();
+                                            car.ParkingSpace.SetOccupied(false);
+
+                                            _cars.Remove(car);
+
+                                            Console.Clear();
+                                            Console.WriteLine($"Véhicule {car.Plate} supprimé\n" +
+                                                              $"Temps : {car.Ticket.Total.TotalHours}h\n" +
+                                                              $"Montant : {car.Ticket.Amount}\n" +
+                                                              "\nAppuyer sur une touche pour continuer");
+                                            Console.ReadKey();
+                                        }
+                                        else
+                                        {
+                                            Console.Clear();
+                                            Console.WriteLine("Annulé");
+                                        }
+                                        break;
+                                    }
+                                }
+                                
+                                if (!found)
+                                {
+                                    Console.Clear();
+                                    Console.WriteLine("Aucun véhicule trouvé !");
+                                }
+
+                            }
+                            else
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Plaque Invalide !");
+                            }
+
+                            Thread.Sleep(1000);
+                            
+                            break;
+                        
+                        case ConsoleKey.D2:
+                            Console.Clear();
+                            Console.WriteLine("Place : ");
+                            
+                            int parkingSpace = int.Parse(Console.ReadLine());
+                            
+                            found = false;
+                                
+                            foreach (Car car in _cars)
+                            {
+                                if(car.ParkingSpace.Number == parkingSpace)
+                                {
+                                    found = true;
+                                    Console.Clear();
+                                    Console.WriteLine("Sur ? O/N");
+                                    _key = Console.ReadKey();
+
+                                    if (_key.Key == ConsoleKey.O)
+                                    {
+                                        car.Ticket.Close();
+                                        car.ParkingSpace.SetOccupied(false);
+
+                                        _cars.Remove(car);
+
+                                        Console.Clear();
+                                        Console.WriteLine($"Véhicule {car.Plate} supprimé\n" +
+                                                          $"Temps : {car.Ticket.Total.TotalHours}h\n" +
+                                                          $"Montant : {car.Ticket.Amount}\n" +
+                                                          "\nAppuyer sur une touche pour continuer");
+                                        Console.ReadKey();
+                                    }
+                                    else
+                                    {
+                                        Console.Clear();
+                                        Console.WriteLine("Annulé");
+                                    }
+                                    break;
+                                }
+                            }
+                            
+                            if (!found)
+                            {
+                                Console.Clear();
+                                Console.WriteLine("Aucun véhicule trouvé !");
+                            }
+                            break;
+                    }
+                    
+                    _key = default;
+                    _isShow = false;
+                    
+                    break;
+                    
 
                 default:
                     break;
@@ -95,7 +223,8 @@ namespace p_oo_parking
             Console.Clear();
 
             Console.WriteLine("1. Ajouter un Véhicule\n" +
-                                "Appuyer sur un touche pour choisir");
+                              "2. Sortir un Véhicule\n" +
+                                "\nAppuyer sur un touche pour choisir");
 
             _isShow = true;
         }

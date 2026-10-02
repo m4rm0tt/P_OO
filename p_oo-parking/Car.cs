@@ -8,16 +8,16 @@ namespace p_oo_parking
 {
     internal class Car
     {
-        private Ticket _ticket;
-        private ParkingSpace _parkingSpace;
+        public Ticket Ticket { get; private set; }
+        public ParkingSpace ParkingSpace { get; private set; }
 
-        private string _plate;
+        public string Plate { get; private set; }
 
         public Car(ParkingSpace parkingSpace, string plate)
         {
-            _ticket = new Ticket();
-            _parkingSpace = parkingSpace;
-            _plate = plate;
+            Ticket = new Ticket();
+            ParkingSpace = parkingSpace;
+            Plate = plate;
         }
     }
 }

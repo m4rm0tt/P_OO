@@ -11,25 +11,28 @@ namespace p_oo_parking
         private DateTime _arrivedTime;
         private DateTime _leavedTime;
 
-        private int _amount;
+        public int Amount { get; private set; }
+        public TimeSpan Total { get; private set; }
 
         public Ticket()
         {
             _arrivedTime = DateTime.Now;
         }
 
-        public void DeleteTicket()
+        public void Close()
         {
-            CalculPrice();   
+            CalculPrice();  
+            
+            
         }
 
         private void CalculPrice()
         {
             _leavedTime = _arrivedTime + TimeSpan.FromHours(1); // Futur Random, mais pour l'instant en dur car je ne vais pas m'eparpier sur tout le code maintenant.
 
-            TimeSpan total = _leavedTime - _arrivedTime;
+            Total = _leavedTime - _arrivedTime;
 
-            _amount = (int)(Math.Floor(total.TotalHours) * Parking.TicketPrice);
+            Amount = (int)(Math.Floor(Total.TotalHours) * Parking.TicketPrice);
         }
     }
 }
