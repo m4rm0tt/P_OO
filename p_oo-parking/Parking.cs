@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.ConstrainedExecution;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace p_oo_parking
 {
@@ -94,119 +96,40 @@ namespace p_oo_parking
                     
                     _key = Console.ReadKey();
 
-                    bool found = false;
-                    
-                    switch(_key.Key)
-                    { 
-                        
-                        case ConsoleKey.D1:
+                    Car car = SearchCar(_key);
+
+                    if (car is not null)
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Sur ? O/N");
+                        _key = Console.ReadKey();
+
+                        if (_key.Key == ConsoleKey.O)
+                        {
+                            car.Ticket.Close();
+                            car.ParkingSpace.SetOccupied(false);
+
+                            _cars.Remove(car);
+
                             Console.Clear();
-                            Console.WriteLine("Plaque : ");
-                            
-                            plate = Console.ReadLine();
-                            isValid = Helpers.PlateValidation(plate);
-                            
-                            if(isValid)
-                            {
-                                found = false;
-                                
-                                foreach (Car car in _cars)
-                                {
-                                    if(car.Plate == plate)
-                                    {
-                                        found = true;
-                                        Console.Clear();
-                                        Console.WriteLine("Sur ? O/N");
-                                        _key = Console.ReadKey();
-
-                                        if (_key.Key == ConsoleKey.O)
-                                        {
-                                            car.Ticket.Close();
-                                            car.ParkingSpace.SetOccupied(false);
-
-                                            _cars.Remove(car);
-
-                                            Console.Clear();
-                                            Console.WriteLine($"Véhicule {car.Plate} supprimé\n" +
-                                                              $"Temps : {car.Ticket.Total.TotalHours}h\n" +
-                                                              $"Montant : {car.Ticket.Amount}\n" +
-                                                              "\nAppuyer sur une touche pour continuer");
-                                            Console.ReadKey();
-                                        }
-                                        else
-                                        {
-                                            Console.Clear();
-                                            Console.WriteLine("Annulé");
-                                        }
-                                        break;
-                                    }
-                                }
-                                
-                                if (!found)
-                                {
-                                    Console.Clear();
-                                    Console.WriteLine("Aucun véhicule trouvé !");
-                                }
-
-                            }
-                            else
-                            {
-                                Console.Clear();
-                                Console.WriteLine("Plaque Invalide !");
-                            }
-
-                            Thread.Sleep(1000);
-                            
-                            break;
-                        
-                        case ConsoleKey.D2:
+                            Console.WriteLine($"Véhicule {car.Plate} supprimé\n" +
+                                              $"Temps : {car.Ticket.Total.TotalHours}h\n" +
+                                              $"Montant : {car.Ticket.Amount}\n" +
+                                              "\nAppuyer sur une touche pour continuer");
+                            Console.ReadKey();
+                        }
+                        else
+                        {
                             Console.Clear();
-                            Console.WriteLine("Place : ");
-                            
-                            int parkingSpace = int.Parse(Console.ReadLine());
-                            
-                            found = false;
-                                
-                            foreach (Car car in _cars)
-                            {
-                                if(car.ParkingSpace.Number == parkingSpace)
-                                {
-                                    found = true;
-                                    Console.Clear();
-                                    Console.WriteLine("Sur ? O/N");
-                                    _key = Console.ReadKey();
-
-                                    if (_key.Key == ConsoleKey.O)
-                                    {
-                                        car.Ticket.Close();
-                                        car.ParkingSpace.SetOccupied(false);
-
-                                        _cars.Remove(car);
-
-                                        Console.Clear();
-                                        Console.WriteLine($"Véhicule {car.Plate} supprimé\n" +
-                                                          $"Temps : {car.Ticket.Total.TotalHours}h\n" +
-                                                          $"Montant : {car.Ticket.Amount}\n" +
-                                                          "\nAppuyer sur une touche pour continuer");
-                                        Console.ReadKey();
-                                    }
-                                    else
-                                    {
-                                        Console.Clear();
-                                        Console.WriteLine("Annulé");
-                                    }
-                                    break;
-                                }
-                            }
-                            
-                            if (!found)
-                            {
-                                Console.Clear();
-                                Console.WriteLine("Aucun véhicule trouvé !");
-                            }
-                            break;
+                            Console.WriteLine("Annulé");
+                        }
                     }
-                    
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Aucun véhicule trouvé !");
+                    }
+
                     _key = default;
                     _isShow = false;
                     
@@ -268,6 +191,67 @@ namespace p_oo_parking
                 {
                     Console.Write($"| {p.Number} : {w} |");
                 }
+            }
+        }
+
+        private Car SearchCar(ConsoleKeyInfo? k)
+        {
+            _key = k ?? _key;
+
+            bool found = false;
+
+            switch (_key.Key)
+            {
+
+                case ConsoleKey.D1:
+                    Console.Clear();
+                    Console.WriteLine("Plaque : ");
+
+                    string plate = Console.ReadLine();
+                    bool isValid = Helpers.PlateValidation(plate);
+
+                    if (isValid)
+                    {
+
+                        foreach (Car car in _cars)
+                        {
+                            if (car.Plate == plate)
+                            {
+                                return car;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Plaque Invalide !");
+                    }
+
+                    Thread.Sleep(1000);
+
+                    return null;
+
+                case ConsoleKey.D2:
+                    Console.Clear();
+                    Console.WriteLine("Place : ");
+
+                    int parkingSpace = int.Parse(Console.ReadLine());
+
+                    found = false;
+
+                    foreach (Car car in _cars)
+                    {
+                        if (car.ParkingSpace.Number == parkingSpace)
+                        {
+                            return car;
+                        }
+                    }
+                    Console.Clear();
+                    Console.WriteLine("Aucun véhicule trouvé !");
+                    return null;
+
+                default:
+                    return null;
             }
         }
     }
