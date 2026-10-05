@@ -17,6 +17,7 @@ namespace p_oo_parking
         private bool _isShow;
 
         public List<ParkingSpace> ParkingSpaces { get; private set; }
+        public int TotalAmount;
 
         static public int TicketPrice { get; private set; } = 5; // Par Heure
 
@@ -177,6 +178,44 @@ namespace p_oo_parking
 
                     break;
 
+                case ConsoleKey.D5:
+
+                    int occupiedPlace = 0;
+                    double ratio;
+
+                    foreach (ParkingSpace ps in ParkingSpaces)
+                    {
+                        if(ps.IsOccupied)
+                        {
+                            occupiedPlace++;
+                        }
+                    }
+
+                    foreach(Car c in _cars)
+                    {
+                        c.Ticket.CalculPrice();
+                        TotalAmount += c.Ticket.Amount;
+                    }
+
+                    ratio = (double)occupiedPlace / (ParkingSpaces.Count + 1);
+
+                    Console.Clear();
+
+                    Console.WriteLine($"""
+                        Place occupées : {occupiedPlace}
+                        Pourcentage du total : {ratio.ToString("P1")}
+                        Montant Total : {TotalAmount}
+
+                        """);
+
+                    Console.WriteLine("\nAppuyer sur une touche pour continuer");
+                    Console.ReadKey();
+
+                    _key = default;
+                    _isShow = false;
+
+                    break;
+
 
                 default:
                     break;
@@ -191,6 +230,7 @@ namespace p_oo_parking
                               "2. Sortir un Véhicule\n" +
                               "3. Afficher l'état du parking\n" +
                               "4. Rechercher un véhicule\n" +
+                              "5. Statistique Parking\n" +
                                 "\nAppuyer sur un touche pour choisir");
 
             _isShow = true;
