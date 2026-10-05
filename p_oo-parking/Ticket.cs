@@ -8,7 +8,7 @@ namespace p_oo_parking
 {
     internal class Ticket
     {
-        private DateTime _arrivedTime;
+        public DateTime ArrivedTime { get; }
         private DateTime _leavedTime;
 
         public int Amount { get; private set; }
@@ -16,21 +16,19 @@ namespace p_oo_parking
 
         public Ticket()
         {
-            _arrivedTime = DateTime.Now;
+            ArrivedTime = DateTime.Now;
         }
 
         public void Close()
         {
-            CalculPrice();  
-            
-            
+            CalculPrice();
         }
 
-        private void CalculPrice()
+        public void CalculPrice()
         {
-            _leavedTime = _arrivedTime + TimeSpan.FromHours(1); // Futur Random, mais pour l'instant en dur car je ne vais pas m'eparpier sur tout le code maintenant.
+            _leavedTime = ArrivedTime + TimeSpan.FromHours(1); // Futur Random, mais pour l'instant en dur car je ne vais pas m'eparpier sur tout le code maintenant.
 
-            Total = _leavedTime - _arrivedTime;
+            Total = _leavedTime - ArrivedTime;
 
             Amount = (int)(Math.Floor(Total.TotalHours) * Parking.TicketPrice);
         }
