@@ -13,7 +13,7 @@ namespace p_oo_parking
         {
             bool validity = false;
 
-            string patern = @"^[A-Z]{2}-\d{3,5}$";
+            string patern = @"^[A-Z]{2}-\d{3,6}$";
 
             return validity = Regex.IsMatch(p, patern);
         }
