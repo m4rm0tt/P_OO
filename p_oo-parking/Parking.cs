@@ -211,7 +211,19 @@ namespace p_oo_parking
                     _isShow = false;
                     
                     break;
+
+                case ConsoleKey.D3:
+
+                    ShowParkingState(ParkingSpaces);
+
+                    Console.WriteLine("\nAppuyer sur une touche pour continuer");
+                    Console.ReadKey();
+
+                    _key = default;
+                    _isShow = false;
                     
+                    break;
+
 
                 default:
                     break;
@@ -224,9 +236,39 @@ namespace p_oo_parking
 
             Console.WriteLine("1. Ajouter un Véhicule\n" +
                               "2. Sortir un Véhicule\n" +
+                              "3. Afficher l'état du parking\n" +
                                 "\nAppuyer sur un touche pour choisir");
 
             _isShow = true;
+        }
+
+        private void ShowParkingState(List<ParkingSpace> parkingSpaces)
+        {
+            int i = 0;
+
+            foreach (ParkingSpace p in  parkingSpaces)
+            {
+                i++;
+                string w;
+                
+                if (p.IsOccupied)
+                {
+                    w = "X";
+                }
+                else
+                {
+                    w = "L";
+                }
+
+                if (i % 5 == 0)
+                {
+                    Console.WriteLine($"| {p.Number} : {w} |");
+                }
+                else
+                {
+                    Console.Write($"| {p.Number} : {w} |");
+                }
+            }
         }
     }
 }
