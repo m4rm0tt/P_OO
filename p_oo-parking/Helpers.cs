@@ -26,5 +26,10 @@ namespace p_oo_parking
             }
             return null;
         }
+
+        public static int RandomNumber(int min, int max)
+        {
+            return Random.Shared.Next(min, max);
+        }
     }
 }

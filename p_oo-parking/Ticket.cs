@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace p_oo_parking
 {
     internal class Ticket
@@ -33,7 +34,7 @@ namespace p_oo_parking
 
         public void CalculPrice()
         {
-            _leavedTime = ArrivedTime + TimeSpan.FromHours(1); // Futur Random, mais pour l'instant en dur car je ne vais pas m'eparpier sur tout le code maintenant.
+            _leavedTime = ArrivedTime + TimeSpan.FromHours(Helpers.RandomNumber(1, 10));
 
             Total = _leavedTime - ArrivedTime;
 
