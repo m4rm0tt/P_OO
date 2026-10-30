@@ -11,12 +11,19 @@ namespace p_oo_parking
         public DateTime ArrivedTime { get; }
         private DateTime _leavedTime;
 
+        private string _plate;
+        private ParkingSpace _parkingSpace;
+
         public int Amount { get; private set; }
         public TimeSpan Total { get; private set; }
 
-        public Ticket()
+        public Ticket(string plate, ParkingSpace parkingSpace)
         {
             ArrivedTime = DateTime.Now;
+            _plate = plate;
+            _parkingSpace = parkingSpace;
+            
+            ShowTicket();
         }
 
         public void Close()
@@ -31,6 +38,22 @@ namespace p_oo_parking
             Total = _leavedTime - ArrivedTime;
 
             Amount = (int)(Math.Floor(Total.TotalHours) * Parking.TicketPrice);
+        }
+        
+        public void ShowTicket(bool close = false)
+        {
+            Console.WriteLine("========== TICKET ==========");
+            Console.WriteLine($"- Plaque : {_plate}");
+            Console.WriteLine($"- Place : {_parkingSpace.Number}");
+            Console.WriteLine($"- Heure d'arrivé : {ArrivedTime.TimeOfDay}");
+
+            if (close)
+            {
+                Console.WriteLine($"- Heure de départ : {_leavedTime.TimeOfDay}");
+                Console.WriteLine($"- Durée : {Total}");
+                Console.WriteLine($"- Montant : {Amount}");
+            }
+            
         }
     }
 }

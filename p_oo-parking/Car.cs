@@ -15,9 +15,10 @@ namespace p_oo_parking
 
         public Car(ParkingSpace parkingSpace, string plate)
         {
-            Ticket = new Ticket();
             ParkingSpace = parkingSpace;
             Plate = plate;
+            
+            Ticket = new Ticket(Plate, ParkingSpace);
         }
     }
 }

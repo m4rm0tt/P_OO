@@ -110,6 +110,7 @@ namespace p_oo_parking
                             Console.WriteLine($"Véhicule {car.Plate} supprimé\n" +
                                               $"Temps : {car.Ticket.Total.TotalHours}h\n" +
                                               $"Montant : {car.Ticket.Amount}");
+                            car.Ticket.ShowTicket(true);
                         }
                         else
                         {
