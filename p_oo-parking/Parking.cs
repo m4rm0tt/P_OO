@@ -12,6 +12,8 @@ namespace p_oo_parking
 {
     internal class Parking
     {
+        private const string LOG_PATH = "E:\\20_Ecole\\P_OO\\p_oo-parking\\history.log";
+
         private List<Car> _cars;
         private ConsoleKeyInfo _key;
         private bool _isShow;
@@ -70,6 +72,8 @@ namespace p_oo_parking
                             Debug.WriteLine($"Véhicule ajouté à la place {freeSpace + 1}");
 
                             Console.WriteLine("Véhicule ajouter !");
+
+                            WriteLog(_cars[_cars.Count - 1]);
                         }
                         else
                         {
@@ -111,6 +115,7 @@ namespace p_oo_parking
                                               $"Temps : {car.Ticket.Total.TotalHours}h\n" +
                                               $"Montant : {car.Ticket.Amount}");
                             car.Ticket.ShowTicket(true);
+                            WriteLog(car, true);
                         }
                         else
                         {
@@ -216,6 +221,49 @@ namespace p_oo_parking
                     _isShow = false;
 
                     break;
+                
+                case ConsoleKey.D6:
+                    FileInfo fileInfo = new FileInfo(LOG_PATH);
+
+                    if (File.Exists(LOG_PATH) && fileInfo.Length != 0)
+                    {
+                        Console.Clear();
+
+                        string[] history = File.ReadAllLines(LOG_PATH);
+
+                        foreach (string line in history)
+                        {
+                            string[] parts = line.Split(';');
+
+                            if (parts[0] == "0")
+                            {
+                                Console.WriteLine($"ENTREE ({parts[2]}) - {parts[1]} (place : {parts[3]})");
+                            }
+                            else
+                            {
+                                Console.WriteLine($"SORTIE ({parts[2]}) - {parts[1]} (place : {parts[3]}, {parts[4]} CHF)");
+                            }
+                        }
+
+                        Console.WriteLine("\nAppuyer sur une touche pour continuer");
+                        Console.ReadKey();
+
+                        _key = default;
+                        _isShow = false;
+                    }
+                    else
+                    {
+                        Console.Clear();
+                        Console.WriteLine("Aucun Historique trouvé !");
+
+                        Console.WriteLine("\nAppuyer sur une touche pour continuer");
+                        Console.ReadKey();
+
+                        _key = default;
+                        _isShow = false;
+                    }
+
+                    break;
 
 
                 default:
@@ -232,6 +280,7 @@ namespace p_oo_parking
                               "3. Afficher l'état du parking\n" +
                               "4. Rechercher un véhicule\n" +
                               "5. Statistique Parking\n" +
+                              "6. Historique\n" +
                                 "\nAppuyer sur un touche pour choisir");
 
             _isShow = true;
@@ -315,6 +364,22 @@ namespace p_oo_parking
 
                 default:
                     return null;
+            }
+        }
+
+        private void WriteLog(Car c, bool isLeaving = false)
+        {
+            if (!isLeaving)
+            {
+                string logLine = $"0;{c.Plate};{c.Ticket.ArrivedTime:HH:mm:ss};{c.ParkingSpace.Number}\n";
+
+                File.AppendAllText(LOG_PATH, logLine);
+            }
+            else
+            {
+                string logLine = $"1;{c.Plate};{c.Ticket.LeavedTime:HH:mm:ss};{c.ParkingSpace.Number};{c.Ticket.Amount}\n";
+
+                File.AppendAllText(LOG_PATH, logLine);
             }
         }
     }

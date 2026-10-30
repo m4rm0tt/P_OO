@@ -10,7 +10,7 @@ namespace p_oo_parking
     internal class Ticket
     {
         public DateTime ArrivedTime { get; }
-        private DateTime _leavedTime;
+        public DateTime LeavedTime;
 
         private string _plate;
         private ParkingSpace _parkingSpace;
@@ -34,9 +34,9 @@ namespace p_oo_parking
 
         public void CalculPrice()
         {
-            _leavedTime = ArrivedTime + TimeSpan.FromHours(Helpers.RandomNumber(1, 10));
+            LeavedTime = ArrivedTime + TimeSpan.FromHours(Helpers.RandomNumber(1, 10));
 
-            Total = _leavedTime - ArrivedTime;
+            Total = LeavedTime - ArrivedTime;
 
             Amount = (int)(Math.Floor(Total.TotalHours) * Parking.TicketPrice);
         }
@@ -50,7 +50,7 @@ namespace p_oo_parking
 
             if (close)
             {
-                Console.WriteLine($"- Heure de départ : {_leavedTime.TimeOfDay}");
+                Console.WriteLine($"- Heure de départ : {LeavedTime.TimeOfDay}");
                 Console.WriteLine($"- Durée : {Total}");
                 Console.WriteLine($"- Montant : {Amount}");
             }
